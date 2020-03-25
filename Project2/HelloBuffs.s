@@ -31,7 +31,7 @@ CRAWL_WORD:
 	srl		r8, r4, r5			# shift current_word by bitshift ctr, then store in temp var
 	or		r6, r6, r8			# OR current_frame with temp(bitshifted current_word)
 	stwio	r6, 0(r2)			# store current_frame into HEX reg
-	movia	r9, 25000000		# delay counter
+	movia	r9, 10000000		# delay counter
 DELAY:
 	subi	r9, r9, 1
 	bne		r9, r0, DELAY		# sub 1, delay until 0
@@ -45,7 +45,7 @@ NEXT_WORD:
 CLEAR_STR:
 	slli	r6, r6, 8			# push current_frame left by 1 letter
 	stwio	r6, 0(r2)			# store current_frame into HEX reg
-	movia	r9, 25000000		# delay counter
+	movia	r9, 10000000		# delay counter
 DELAY_2:
 	subi	r9, r9, 1
 	bne		r9, r0, DELAY_2		# sub 1, delay until 0
@@ -56,7 +56,7 @@ DELAY_2:
 A_FRAME:
 	ldw		r6, 0(r3)			# current_frame = A
 	stwio	r6, 0(r2)			# store current_frame into HEX reg
-	movia	r9, 25000000		# delay counter
+	movia	r9, 10000000		# delay counter
 DELAY_3:
 	subi	r9, r9, 1
 	bne		r9, r0, DELAY_3		# sub 1, delay until 0
@@ -66,7 +66,7 @@ B_FRAME:
 	subi	r7, r7, 1			# decrement frame ctr
 	ldw		r6, 4(r3)			# current frame = B
 	stwio	r6, 0(r2)			# put into hex reg
-	movia	r9, 25000000		# delay ctr
+	movia	r9, 10000000		# delay ctr
 	br		DELAY_3				# wait
 C_PATTERN:
 	movia	r3, CD				# load cd pattern
@@ -75,7 +75,7 @@ C_PATTERN:
 C_FRAME:
 	ldw		r6, 0(r3)			# current_frame = C
 	stwio	r6, 0(r2)			# store current_frame into HEX reg
-	movia	r9, 25000000		# delay counter
+	movia	r9, 10000000		# delay counter
 DELAY_4:
 	subi	r9, r9, 1
 	bne		r9, r0, DELAY_4		# sub 1, delay until 0
@@ -85,7 +85,7 @@ D_FRAME:
 	subi	r7, r7, 1			# decrement frame ctr
 	ldw		r6, 4(r3)			# current frame = B
 	stwio	r6, 0(r2)			# put into hex reg
-	movia	r9, 25000000		# delay ctr
+	movia	r9, 10000000		# delay ctr
 	br		DELAY_4				# wait
 
 
