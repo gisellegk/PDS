@@ -60,7 +60,7 @@ A_FRAME:
 DELAY_3:
 	subi	r9, r9, 1
 	bne		r9, r0, DELAY_3		# sub 1, delay until 0
-	beq		r7, r0, C_FRAME		# if frame ctr = 0, go to C_FRAME
+	beq		r7, r0, C_PATTERN		# if frame ctr = 0, go to C_FRAME
 	bne		r8, r6, A_FRAME	    # if B frame just completed, go to A
 B_FRAME:
 	subi	r7, r7, 1			# decrement frame ctr
@@ -68,8 +68,27 @@ B_FRAME:
 	stwio	r6, 0(r2)			# put into hex reg
 	movia	r9, 25000000		# delay ctr
 	br		DELAY_3				# wait
+C_PATTERN:
+	movia	r3, CD				# load cd pattern
+	movia	r7, 3				# frame_ctr
+	ldw		r8, 0(r3)			# store value of C in temp var
 C_FRAME:
-	br		RESET
+	ldw		r6, 0(r3)			# current_frame = C
+	stwio	r6, 0(r2)			# store current_frame into HEX reg
+	movia	r9, 25000000		# delay counter
+DELAY_4:
+	subi	r9, r9, 1
+	bne		r9, r0, DELAY_4		# sub 1, delay until 0
+	beq		r7, r0, RESET		# if frame ctr = 0, go to RESET
+	bne		r8, r6, C_FRAME	    # if D frame just completed, go to C
+D_FRAME:
+	subi	r7, r7, 1			# decrement frame ctr
+	ldw		r6, 4(r3)			# current frame = B
+	stwio	r6, 0(r2)			# put into hex reg
+	movia	r9, 25000000		# delay ctr
+	br		DELAY_4				# wait
+
+
 /******************************************************************************/
 	.data						# data follows
 BUFFS:	#	HELL		O_BU		FFS-	 	--__
