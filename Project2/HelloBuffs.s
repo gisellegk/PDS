@@ -18,8 +18,8 @@
 	.global	_start
 _start:
 	movia	r2, HEX 			# HEX3-HEX0 register
-	movia	r5, 32				# bitshift ctr / hack fix for zero problem
 RESET:
+	movia	r5, 32				# bitshift ctr 
 	movia 	r3, BUFFS			# ptr to BUFFS data
 	ldw		r4, 0(r3)			# current word = first index of buffs
 	movia	r6, 0				# current frame
@@ -42,6 +42,33 @@ NEXT_WORD:
 	addi	r3, r3, 4			# increment BUFFS ptr
 	subi	r7, r7, 1			# decrement frame ctr
 	bne		r7, r0, CRAWL_WORD	# if not out of data, go back
+CLEAR_STR:
+	slli	r6, r6, 8			# push current_frame left by 1 letter
+	stwio	r6, 0(r2)			# store current_frame into HEX reg
+	movia	r9, 25000000		# delay counter
+DELAY_2:
+	subi	r9, r9, 1
+	bne		r9, r0, DELAY_2		# sub 1, delay until 0
+	bne		r6, r0, CLEAR_STR:	# repeat until screen is clear
+	movia	r3, AB				# load AB pattern
+	movia	r7, 3				# frame_ctr
+	ldw		r8, 0(r3)			# store value of A in temp var
+A_FRAME:
+	ldw		r6, 0(r3)			# current_frame = A
+	stwio	r6, 0(r2)			# store current_frame into HEX reg
+	movia	r9, 25000000		# delay counter
+DELAY_3:
+	subi	r9, r9, 1
+	bne		r9, r0, DELAY_3		# sub 1, delay until 0
+	beq		r7, r0, C_FRAME		# if frame ctr = 0, go to C_FRAME
+	bne		r8, r6, A_FRAME	    # if B frame just completed, go to A
+B_FRAME:
+	subi	r7, r7, 1			# decrement frame ctr
+	ldw		r6, 4(r3)			# current frame = B
+	stwio	r6, 0(r2)			# put into hex reg
+	movia	r9, 25000000		# delay ctr
+	br		DELAY_3				# wait
+C_FRAME:
 	br		RESET
 /******************************************************************************/
 	.data						# data follows
