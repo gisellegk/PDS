@@ -1,0 +1,30 @@
+Timer uses 100MHz clock - 10 ns period
+
+zero:
+350 ns / 800 ns
+[20, 50] / [65, 95] Clock 
+
+one: 
+700 ns / 600 ns
+[55, 85] / [45, 75]
+
+reset: 
+LOW >50,000 ns
+at least 5,000 clock cycles
+
+
+r16 = GPIO_IO
+r17 = TIMER_START_LSB
+r18 = TIMER_CTRL
+r19 = TIMER_STATUS
+
+- make it just write 1's
+- make it write zeros
+- write an arbitrary number out
+
+
+- Decide / create frame of colors (ie. GRB GRB GRB for a 3 color pattern)
+- send the reset code 
+- send out the bits one at a time until all LEDs have been lit (some sort of counter thing & it should just repeat the pattern)
+
+

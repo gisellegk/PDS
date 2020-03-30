@@ -1,0 +1,99 @@
+Q3
+.text
+
+foo:
+    # Write your function prologue here
+    # move the sp down 2 spots
+    # store contents of r16 and then r18 in those 2 spots
+    subi    sp, sp, 8
+    stw     r16, (sp)
+    stw     r18, 4(sp)
+    
+    add     r2, r4, r5
+    mov     r6, r4
+    slli    r12, r6, 4
+    mul     r16, r2, r12
+    sub     r18, r2, r12
+    add     r2, r16, r18
+    
+    # Write your function epilogue here
+    # in exactly the reverse order of the prologue
+    ldw     r18, 4(sp)
+    ldw     r16, (sp)
+    addi    sp, sp, 8
+    
+    ret
+
+Q6
+.text
+#    int sum_dice(int N){
+#        while ( N > 0) {
+#            sum = sum + roll();
+#            N--;
+#        }
+#        return sum;
+#    }
+
+sum_dice:
+    # Write your function here
+    ble     r4, r0, N_is_zero #bypass to return if n = 0   
+
+    #prologue
+    subi    sp, sp, 12          # store 3 items: ra, r16 (sum) and r17 (n)
+    stw     ra, 8(sp)           # store old return address
+    stw     r16, 4(sp)          # r16 is our sum variable
+    stw     r17, (sp)           # we need to save N
+    
+    mov     r16, r0             # sum = 0   
+    mov     r17, r4             # save N (1st parameter, r4) in r17
+
+loop_top:
+    call roll
+    add     r16, r16, r2        # r16 = r16 + r2 (return val saved here)
+    subi    r17, r17, 1         # n--
+    bgt     r17, r0, loop_top   # if r17 > 0, repeat the loop
+    
+    mov     r2, r16
+    
+    #epilogue
+    ldw     r17, (sp)
+    ldw     r16, 4(sp)
+    ldw     ra, 8(sp)
+    addi    sp, sp, 12
+N_is_zero:
+
+    ret
+    
+    
+#another option: use the stack instead of the protected registers
+
+#.text
+
+#sum_dice:
+#    ble     r4, r0, N_is_zero #bypass to return if n = 0   
+
+    #prologue
+#    subi    sp, sp, 12          # store 3 items: ra, r16 (sum) and a space for r4
+#    stw     ra, 8(sp)           # store old return address
+#    stw     r16, 4(sp)          # r16 is our sum variable
+    
+#    mov     r16, r0             # sum = 0   
+
+
+#loop_top:
+#    stw     r4, (sp) # backup r4 on the stack
+#    call    roll
+#    ldw     r4, (sp) # put it back
+
+#    add     r16, r16, r2        # r16 = r16 + r2 (return val saved here)
+#    subi    r4, r4, 1         # n--
+#    bgt     r4, r0, loop_top   # if r4 > 0, repeat the loop
+    
+#    mov     r2, r16
+    
+    #epilogue
+#    ldw     r16, 4(sp)
+#    ldw     ra, 8(sp)
+#    addi    sp, sp, 12
+#N_is_zero:
+#    ret
