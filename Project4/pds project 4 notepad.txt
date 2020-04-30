@@ -1,0 +1,16 @@
+NUM_CHARS = 18
+WORD_OFFSET = 0 // [0,4]
+LETTER_SHIFT = 3 // [3,0]
+CURRENT_WORD (address somewhere in BUFFS)
+
+- if NUM_CHARS == 0, RESET_VARS
+- read current HEX state
+- Shift current HEX state to the left by 8
+
+- read CURRENT_WORD[LETTER_INDEX]
+- shift RIGHT by LETTER_SHIFT 
+- OR current HEX state with LETTER_SHIFT
+
+- write 
+
+- read current byte BUFFS[WORD_OFFSET][LETTER_INDEX]

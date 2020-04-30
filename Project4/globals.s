@@ -1,0 +1,2 @@
+.equ 	SCROLL_STR_STATE,		0
+.equ	CLEAR_STR_STATE,			1
