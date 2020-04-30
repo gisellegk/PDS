@@ -1,0 +1,6 @@
+Part 2.1
+GiselleKooA+
+
+Part 2.2
+STUDENT_NAME_LEN:   .word   0x14         # Length of STUDENT_NAME in bytes
+STUDENT_NAME:       .ascii "\x47\x69\x73\x65\x6c\x6c\x65\x00\xf4\xff\xff\x03\xd4\x00\x00\x00\xfc\x00\x00\x00"
