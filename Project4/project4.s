@@ -1,17 +1,6 @@
 	.include "address_map_nios2.s"
 	.include "globals.s"
 
-/*******************************************************************************
- * This program demonstrates use of interrupts. It
- * first starts an interval timer with 50 msec timeouts, and then enables 
- * Nios II interrupts from the interval timer and pushbutton KEYs
- *
- * The interrupt service routine for the interval timer displays a pattern
- * on the HEX3-0 displays, and rotates this pattern either left or right:
- *		KEY[0]: loads a new pattern from the SW switches
- *		KEY[1]: toggles rotation direction
- ******************************************************************************/
-
 	.text						# executable code follows
 	.global _start
 _start:
@@ -20,7 +9,7 @@ _start:
 
 	movia	r16, TIMER_BASE		# interval timer base address
 	/* set the interval timer period for scrolling the HEX displays */
-	movia	r12, 50000000		# 1/(100 MHz) x (5 x 10^6) = 50 msec
+	movia	r12, 0x01800000		# starting speed
 	sthio	r12, 8(r16)			# store the low half word of counter start value
 	srli	r12, r12, 16
 	sthio	r12, 0xC(r16)		# high half word of counter start value
@@ -38,6 +27,10 @@ _start:
 	movia	r7, BUFFS			# Initialize CUR_WORD_PTR
 	movia	r8, CURR_WORD_PTR
 	stw 	r7, (r8)
+
+	movia	r8, LEDR_BASE		# LEDs
+	movia	r7, 3				# initialize speed at 3
+	stwio	r7, 0(r8)			# save to leds
 
 	/* enable Nios II processor interrupts */
 	movia	r7, 0x00000001		# get interrupt mask bit for interval timer

@@ -50,7 +50,7 @@ CHECK_LEVEL_1:						# pushbutton port is interrupt level 1
 	andi	r22, et, 0b10
 	beq		r22, r0, END_ISR		# other interrupt levels are not handled in this code
 
-	#call	PUSHBUTTON_ISR				
+	call	PUSHBUTTON_ISR				
 
 END_ISR:
 	ldw		et, 0(sp)				# restore all used register to previous values
